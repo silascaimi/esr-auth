@@ -31,6 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		//http.csrf().disable();  //Desativado CSRF
+		
+		// Configuração necessária para uso do fluxo authorization code
+		http
+			.authorizeRequests()
+				.anyRequest().authenticated()
+	         .and()
+	         	.formLogin().permitAll();
+		
 	}
 	
 	@Bean
