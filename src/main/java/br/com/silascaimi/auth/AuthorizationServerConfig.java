@@ -65,8 +65,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	// Configurar o acesso ao endpoint check_token
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.checkTokenAccess("isAuthenticated()");
-		//security.checkTokenAccess("permitAll()"); // permitindo acesso sem autenticação do client
+		//security.checkTokenAccess("isAuthenticated()");
+		security.checkTokenAccess("permitAll()"); // permitindo acesso sem autenticação do client
+			//.allowFormAuthenticationForClients(); // permitir que o cliente autentique passando as credenciais como parametros
 	}
 	
 	@Override
