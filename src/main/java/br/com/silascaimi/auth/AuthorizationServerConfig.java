@@ -28,18 +28,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.secret(passwordEncode.encode("web123"))
 				.authorizedGrantTypes("password")
 				.scopes("write", "read")
-				.accessTokenValiditySeconds(60 * 60 * 6);
-//			.and()
-//				.withClient("app-mobile")
-//				.secret(passwordEncode.encode("abc555"))
-//				.authorizedGrantTypes("password")
-//				.scopes("write", "read");
+				.accessTokenValiditySeconds(60 * 60 * 6)
+			.and()
+				.withClient("checktoken")
+				.secret(passwordEncode.encode("checktoken"))
+				.authorizedGrantTypes("password")
+				.scopes("write", "read");
 	}
 	
 	// Configurar o acesso ao endpoint check_token
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 		security.checkTokenAccess("isAuthenticated()");
+		//security.checkTokenAccess("permitAll()"); // permitindo acesso sem autenticação do client
 	}
 	
 	@Override
