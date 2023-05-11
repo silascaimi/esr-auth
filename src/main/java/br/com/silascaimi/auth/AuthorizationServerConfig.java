@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
@@ -32,7 +33,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.secret(passwordEncode.encode("web123"))
 				.authorizedGrantTypes("password", "refresh_token")
 				.scopes("write", "read")
-				.accessTokenValiditySeconds(60 * 60 * 6)
+				.accessTokenValiditySeconds(60 * 60 * 6) // 6 horas
+				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias
 			.and()
 				.withClient("checktoken")
 				.secret(passwordEncode.encode("checktoken"))
@@ -51,6 +53,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		endpoints
 			.authenticationManager(authenticationManager)
-			.userDetailsService(userDetailsService); // especifica o userDetailsService para trabalhar com refreshtoken
+			.userDetailsService(userDetailsService) // especifica o userDetailsService para trabalhar com refreshtoken
+			.reuseRefreshTokens(false);
 	}
 }
