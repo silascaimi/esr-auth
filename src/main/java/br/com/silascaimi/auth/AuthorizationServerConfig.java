@@ -3,8 +3,8 @@ package br.com.silascaimi.auth;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +15,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 @SuppressWarnings("deprecation")
 @Configuration
@@ -32,8 +31,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
-	@Autowired
-	private RedisConnectionFactory redisConnectionFactory;
+//	@Autowired
+//	private RedisConnectionFactory redisConnectionFactory;
 	
 	// Configurando os clientes que podem acessar o authorization em memória
 	@Override
@@ -82,12 +81,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 			.authenticationManager(authenticationManager)
 			.userDetailsService(userDetailsService) // especifica o userDetailsService para trabalhar com refreshtoken
 			.reuseRefreshTokens(false)
-			.tokenStore(redisTokenStore())
+			//.tokenStore(redisTokenStore())
+			.accessTokenConverter(jwtAccessTokerConverter())
 			.tokenGranter(tokenGranter(endpoints));
 	}
 	
-	private TokenStore redisTokenStore() {
-		return new RedisTokenStore(redisConnectionFactory);
+	// remove configurações do redis para inclusão de jwt
+//	private TokenStore redisTokenStore() {
+//		return new RedisTokenStore(redisConnectionFactory);
+//	}
+	
+	@Bean
+	public JwtAccessTokenConverter jwtAccessTokerConverter() {
+		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+		jwtAccessTokenConverter.setSigningKey("a17c5fef0b9d41719d72b1014903f269");
+		
+		return jwtAccessTokenConverter;
 	}
 	
 	private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
