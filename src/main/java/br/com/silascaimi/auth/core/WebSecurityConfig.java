@@ -16,17 +16,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	// Configurando autenticação de usuários em memória com uso da função para encriptar com BCrypt
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication()
-			.withUser("silas")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMIN")
-			.and()
-				.withUser("joao")
-				.password(passwordEncoder().encode("123"))
-				.roles("ADMIN");
-	}
+	// removido após implementação para busca de usuários no banco de dados
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.inMemoryAuthentication()
+//			.withUser("silas")
+//				.password(passwordEncoder().encode("123"))
+//				.roles("ADMIN")
+//			.and()
+//				.withUser("joao")
+//				.password(passwordEncoder().encode("123"))
+//				.roles("ADMIN");
+//	}
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -54,9 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	// Cria o bean de user details service para usar refresh token
-	@Bean
-	@Override
-	protected UserDetailsService userDetailsService() {
-		return super.userDetailsService();
-	}
+	// removido após implementação para busca de usuários no banco de dados
+//	@Bean
+//	@Override
+//	protected UserDetailsService userDetailsService() {
+//		return super.userDetailsService();
+//	}
 }
