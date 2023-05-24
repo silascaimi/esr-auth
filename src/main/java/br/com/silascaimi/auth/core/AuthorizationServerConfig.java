@@ -1,4 +1,4 @@
-package br.com.silascaimi.auth;
+package br.com.silascaimi.auth.core;
 
 import java.util.Arrays;
 
