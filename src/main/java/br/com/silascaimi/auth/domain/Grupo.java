@@ -1,5 +1,6 @@
 package br.com.silascaimi.auth.domain;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,20 +20,23 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "usuario")
-public class Usuario {
+@Table(name = "grupo")
+public class Grupo implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank
 	private String nome;
-	private String email;
-	private String senha;
 	
 	@ManyToMany
-	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "usuario_id"),
-			inverseJoinColumns = @JoinColumn(name = "grupo_id"))
-	private Set<Grupo> grupos = new HashSet<>();
+	@JoinTable(name = "grupo_permissao",
+		joinColumns = @JoinColumn(name = "grupo_id"), 
+		inverseJoinColumns = @JoinColumn(name = "permissao_id"))
+	Set<Permissao> permissoes = new HashSet<>();
+	
 }
