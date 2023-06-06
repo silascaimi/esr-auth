@@ -50,30 +50,30 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 				.withClient("esr-web")
 				.secret(passwordEncode.encode("web123"))
 				.authorizedGrantTypes("password", "refresh_token")
-				.scopes("write", "read")
+				.scopes("WRITE", "READ")
 				.accessTokenValiditySeconds(60 * 60 * 6) // 6 horas
 				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias
 			.and()
 				.withClient("faturamento")
 				.secret(passwordEncode.encode("faturamento123"))
 				.authorizedGrantTypes("client_credentials")
-				.scopes("write", "read")
+				.scopes("WRITE", "READ")
 			.and()
 				.withClient("foodanalystics")
 				.secret(passwordEncode.encode("food123"))
 				.authorizedGrantTypes("authorization_code")
-				.scopes("write", "read")
+				.scopes("WRITE", "READ")
 				.redirectUris("http://www.foodanalytics.local:8082")
 			.and()
 				.withClient("webadmin")
 				.authorizedGrantTypes("implicit")
-				.scopes("write", "read")
+				.scopes("WRITE", "READ")
 				.redirectUris("http://aplicacao-cliente")
 			.and()
 				.withClient("checktoken")
 				.secret(passwordEncode.encode("checktoken"))
 				.authorizedGrantTypes("password")
-				.scopes("write", "read");
+				.scopes("WRITE", "READ");
 	}
 	
 	// Configurar o acesso ao endpoint check_token
