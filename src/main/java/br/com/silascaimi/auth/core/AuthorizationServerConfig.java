@@ -2,6 +2,8 @@ package br.com.silascaimi.auth.core;
 
 import java.util.Arrays;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +30,8 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
 
-	@Autowired
-	private PasswordEncoder passwordEncode;
+//	@Autowired
+//	private PasswordEncoder passwordEncode;
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -40,40 +42,45 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Autowired
 	private JwtKeyStoreProperties jwtKeyStoreProperties;
 	
+	@Autowired
+	private DataSource dataSource;
+	
 //	@Autowired
 //	private RedisConnectionFactory redisConnectionFactory;
 	
 	// Configurando os clientes que podem acessar o authorization em memória
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory()
-				.withClient("esr-web")
-				.secret(passwordEncode.encode("web123"))
-				.authorizedGrantTypes("password", "refresh_token")
-				.scopes("WRITE", "READ")
-				.accessTokenValiditySeconds(60 * 60 * 6) // 6 horas
-				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias
-			.and()
-				.withClient("faturamento")
-				.secret(passwordEncode.encode("faturamento123"))
-				.authorizedGrantTypes("client_credentials")
-				.scopes("WRITE", "READ")
-			.and()
-				.withClient("foodanalystics")
-				.secret(passwordEncode.encode("food123"))
-				.authorizedGrantTypes("authorization_code")
-				.scopes("WRITE", "READ")
-				.redirectUris("http://www.foodanalytics.local:8082")
-			.and()
-				.withClient("webadmin")
-				.authorizedGrantTypes("implicit")
-				.scopes("WRITE", "READ")
-				.redirectUris("http://aplicacao-cliente")
-			.and()
-				.withClient("checktoken")
-				.secret(passwordEncode.encode("checktoken"))
-				.authorizedGrantTypes("password")
-				.scopes("WRITE", "READ");
+		clients.jdbc(dataSource);
+		// Aletarado clientes em memória para clientes em banco de dados
+//		clients.inMemory()
+//				.withClient("esr-web")
+//				.secret(passwordEncode.encode("web123"))
+//				.authorizedGrantTypes("password", "refresh_token")
+//				.scopes("WRITE", "READ")
+//				.accessTokenValiditySeconds(60 * 60 * 6) // 6 horas
+//				.refreshTokenValiditySeconds(60 * 24 * 60 * 60) // 60 dias
+//			.and()
+//				.withClient("faturamento")
+//				.secret(passwordEncode.encode("faturamento123"))
+//				.authorizedGrantTypes("client_credentials")
+//				.scopes("WRITE", "READ")
+//			.and()
+//				.withClient("foodanalystics")
+//				.secret(passwordEncode.encode("food123"))
+//				.authorizedGrantTypes("authorization_code")
+//				.scopes("WRITE", "READ")
+//				.redirectUris("http://www.foodanalytics.local:8082")
+//			.and()
+//				.withClient("webadmin")
+//				.authorizedGrantTypes("implicit")
+//				.scopes("WRITE", "READ")
+//				.redirectUris("http://aplicacao-cliente")
+//			.and()
+//				.withClient("checktoken")
+//				.secret(passwordEncode.encode("checktoken"))
+//				.authorizedGrantTypes("password")
+//				.scopes("WRITE", "READ");
 	}
 	
 	// Configurar o acesso ao endpoint check_token
